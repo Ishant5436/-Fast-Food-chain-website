@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuickBite | Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* MENU PAGE STYLES */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-container {
+            display: flex;
+            padding: 20px 8%;
+            gap: 20px;
+        }
+
+        /* Sidebar Categories */
+        .sidebar {
+            flex: 1;
+            max-width: 200px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #ff5722;
+        }
+
+        .category {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.2s;
+        }
+
+        .category:hover {
+            background: #ff5722;
+            color: white;
+        }
+
+        /* Main Menu Content */
+        .menu-content {
+            flex: 3;
+        }
+
+        /* Filters and Search */
+        .menu-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .menu-filters input[type="text"] {
+            padding: 10px;
+            flex: 1;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .menu-filters select,
+        .menu-filters label {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Sections */
+        .menu-section {
+            margin-bottom: 50px;
+        }
+
+        .menu-section h2 {
+            color: #ff5722;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ff5722;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* Food Cards */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+
+        .food-card:hover {
+            transform: scale(1.02);
+        }
+
+        .food-card img {
+            width: 100%;
+            border-radius: 10px;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .food-info {
+            margin-top: 10px;
+        }
+
+        .food-info h4 {
+            margin: 5px 0;
+        }
+
+        .food-info p {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .food-info .price {
+            font-weight: bold;
+            color: #ff5722;
+        }
+
+        .food-info .rating {
+            color: #fbc02d;
+            margin: 5px 0;
+        }
+
+        .food-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .food-actions button,
+        .food-actions input[type="number"] {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ff5722;
+            background: #ff5722;
+            color: white;
+            cursor: pointer;
+        }
+
+        .food-actions input[type="number"] {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #ccc;
+            background: white;
+            color: black;
+        }
+
+        .food-card {
+            position: relative;
+            /* important so panel is positioned correctly */
+            margin-bottom: 30px;
+        }
+
+        /* Veg / Non-Veg Indicator */
+        .veg {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: green;
+            margin-right: 5px;
+        }
+
+        .non-veg {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: red;
+            margin-right: 5px;
+        }
+
+        .customize-panel {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--=== NAVBAR ===-->
+    <header class="navbar">
+        <div class="logo">QuickBite</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <div class="cart-icon" onclick="window.location.href='cart.html'">
+                🛒
+                <span id="cart-count">0</span>
+            </div>
+            <div class="profile-icon" onclick="window.location.href='login.html'">
+                👤
+            </div>
+        </div>
+    </header>
+
+    <h1 style="text-align:center; margin:20px 0; color:#ff5722;">QuickBite Menu</h1>
+
+    <div class="menu-container">
+        <!-- Sidebar Categories -->
+        <div class="sidebar">
+            <h3>Categories</h3>
+            <div class="category" onclick="scrollToSection('popular')">🔥 Popular Items</div>
+            <div class="category" onclick="scrollToSection('fastmoving')">⚡ Fast Moving Items</div>
+            <div class="category" onclick="scrollToSection('burgers')">🍔 Burgers</div>
+            <div class="category" onclick="scrollToSection('pizzas')">🍕 Pizzas</div>
+            <div class="category" onclick="scrollToSection('wraps')">🌯 Wraps & Rolls</div>
+            <div class="category" onclick="scrollToSection('sides')">🍟 Sides</div>
+            <div class="category" onclick="scrollToSection('beverages')">🥤 Beverages</div>
+            <div class="category" onclick="scrollToSection('desserts')">🍰 Desserts</div>
+            <div class="category" onclick="scrollToSection('healthy')">🥗 Healthy Options</div>
+            <div class="category" onclick="scrollToSection('combos')">🥣 Combos / Meal Deals</div>
+        </div>
+
+        <!-- Menu Content -->
+        <div class="menu-content">
+            <!-- Filters -->
+            <div class="menu-filters">
+                <input type="text" id="search" placeholder="Search for food..." onkeyup="filterFood()">
+                <label>
+                    <input type="checkbox" id="vegOnly" onchange="filterFood()"> Veg Only
+                </label>
+                <select id="priceFilter" onchange="filterFood()">
+                    <option value="">Sort by Price</option>
+                    <option value="low">Low to High</option>
+                    <option value="high">High to Low</option>
+                </select>
+                <select id="sortFilter" onchange="filterFood()">
+                    <option value="">Sort By</option>
+                    <option value="bestseller">Best Seller</option>
+                    <option value="new">New Items</option>
+                    <option value="offer">Offers</option>
+                </select>
+            </div>
+
+            <!-- Popular Items -->
+            <div id="popular" class="menu-section">
+                <h2>🔥 Popular Items</h2>
+                <div class="food-grid">
+                    <!-- Cheese Burger -->
+                    <div class="food-card" data-name="Cheeseburger" data-veg="false" data-price="200"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://images.unsplash.com/photo-1598182198871-d3f4ab4fd181?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8Y2hlZXNlYnVyZ2VyfGVufDB8fDB8fHww"
+                            alt="Cheese Burger">
+                        <div class="food-info">
+                            <h4>Cheese Burger</h4>
+                            <p>Juicy beef patty with cheese and lettuce</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹200</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Margherita Pizza -->
+                    <div class="food-card" data-name="Margherita Pizza" data-veg="true" data-price="350">
+                        <img src="https://media.istockphoto.com/id/1414575281/photo/a-delicious-and-tasty-italian-pizza-margherita-with-tomatoes-and-buffalo-mozzarella.webp?a=1&b=1&s=612x612&w=0&k=20&c=qO_TA5oZTY4d1e14l6noMYmAB26sSoE8L0m_VYl2bcU="
+                            alt="Margherita Pizza">
+                        <div class="food-info">
+                            <h4>Margherita Pizza</h4>
+                            <p>Classic pizza with fresh tomato and cheese</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹350</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- French Fries -->
+                    <div class="food-card" data-name="French Fries" data-veg="true" data-price="100">
+                        <img src="https://media.istockphoto.com/photos/appetizing-french-fries-in-a-bowl-picture-id966934632?b=1&k=20&m=966934632&s=170667a&w=0&h=7zJeIigX9iEiK_cFC5scOWCNzehRfbQZGS54KBpTlqY="
+                            alt="French Fries">
+                        <div class="food-info">
+                            <h4>French Fries</h4>
+                            <p>Crispy golden fries with ketchup</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹100</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chicken Wrap -->
+                    <div class="food-card" data-name="Chicken Wrap" data-veg="false" data-price="250">
+                        <img src="https://images.unsplash.com/photo-1666819615040-eff5e52c778a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHdyYXB8ZW58MHx8MHx8fDA%3D"
+                            alt="Chicken Wrap">
+                        <div class="food-info">
+                            <h4>Chicken Wrap</h4>
+                            <p>Grilled chicken with fresh veggies</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹250</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chocolate Muffin -->
+                    <div class="food-card" data-name="Chocolate Muffin" data-veg="true" data-price="120">
+                        <img src="https://images.unsplash.com/photo-1605615471737-4b2b4ba1d432?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2hvY29sYXRlJTIwbXVmZmlufGVufDB8fDB8fHww"
+                            alt="Chocolate Muffin">
+                        <div class="food-info">
+                            <h4>Chocolate Muffin</h4>
+                            <p>Rich chocolate muffin with cream</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹120</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fast Moving -->
+            <div id="fastmoving" class="menu-section">
+                <h2>⚡ Fast Moving Items</h2>
+                <div class="food-grid">
+                    <!-- Cheese Sandwich -->
+                    <div class="food-card" data-name="Cheese Sandwich" data-veg="true" data-price="150">
+                        <img src="https://as1.ftcdn.net/v2/jpg/01/41/39/22/1000_F_141392247_kAFrBzgv5sjPNPf5jSGneEZJ8cIWNIAy.jpg"
+                            alt="Cheese Sandwich">
+                        <div class="food-info">
+                            <h4>Cheese Sandwich</h4>
+                            <p>Grilled sandwich with cheese</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹150</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- White Sauce Pasta -->
+                    <div class="food-card" data-name="White Sauce Pasta" data-veg="true" data-price="220">
+                        <img src="https://www.whiskaffair.com/wp-content/uploads/2021/05/White-Sauce-Paste-2-1-1200x1800.jpg"
+                            alt="White Sauce Pasta">
+                        <div class="food-info">
+                            <h4>White Sauce Pasta</h4>
+                            <p>Creamy white sauce pasta</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹220</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Red Sauce Pasta -->
+                    <div class="food-card" data-name="Red Sauce Pasta" data-veg="true" data-price="210">
+                        <img src="https://patelcafenrestro.com/wp-content/uploads/2024/08/DM-2024-08-09T122142.723.png"
+                            alt="Red Sauce Pasta">
+                        <div class="food-info">
+                            <h4>Red Sauce Pasta</h4>
+                            <p>Tangy tomato pasta</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹210</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tacos -->
+                    <div class="food-card" data-name="Tacos" data-veg="false" data-price="200">
+                        <img src="https://forevertwentysomethings.com/wp-content/uploads/2016/10/tacos.jpg" alt="Tacos">
+                        <div class="food-info">
+                            <h4>Tacos</h4>
+                            <p>Mexican style chicken tacos</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹200</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Burgers -->
+            <div id="burgers" class="menu-section">
+                <h2>🍔 Burgers</h2>
+                <div class="food-grid">
+                    <!-- Veggie Delight -->
+                    <div class="food-card" data-name="Veggie Delight" data-veg="true" data-price="180">
+                        <img src="https://media.istockphoto.com/id/1490923055/photo/vegan-burger.webp?a=1&b=1&s=612x612&w=0&k=20&c=Lr-7tUJoiyzPVw2WRu-GfpZRb_D3GKEa7VrkexWxn34="
+                            alt="Veggie Delight">
+                        <div class="food-info">
+                            <h4>Veggie Delight</h4>
+                            <p>Loaded with fresh vegetables and cheese</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹180</div>
+                            <div class="rating">⭐ 4.2</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chicken Burger -->
+                    <div class="food-card" data-name="Chicken Burger" data-veg="false" data-price="260"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://media.istockphoto.com/photos/classic-burger-with-chicken-in-a-bun-with-sesame-tomatoes-lettuce-and-picture-id1201001069?b=1&k=20&m=1201001069&s=170667a&w=0&h=saLSeIhzPR_Gvy-wDPcx8HhW-kWsNxOErCxVf7GE-k0="
+                            alt="Chicken Burger">
+                        <div class="food-info">
+                            <h4>Chicken Burger</h4>
+                            <p>Grilled chicken patty with spicy mayo</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹220</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Double Cheese Burger -->
+                    <div class="food-card" data-name="Double Cheese Burger" data-veg="false" data-price="250">
+                        <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Double Cheese Burger">
+                        <div class="food-info">
+                            <h4>Double Cheese Burger</h4>
+                            <p>Double beef patty with extra cheese</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹250</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Paneer Burger -->
+                    <div class="food-card" data-name="Paneer Burger" data-veg="true" data-price="240" data-new="true">
+                        <img src="https://vegplatter.in/files/public/images/partner/catalog/231/Spicy%20Paneer%20Burger-750x750.png"
+                            alt="Paneer Burger">
+                        <div class="food-info">
+                            <h4>Paneer Burger</h4>
+                            <p>Grilled paneer with spices and salad</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹200</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Spicy Chicken Burger -->
+                    <div class="food-card" data-name="Spicy Chicken Burger" data-veg="false" data-price="230">
+                        <img src="https://media.istockphoto.com/id/2165645908/photo/delicious-chicken-burger-with-spicy-french-fries.webp?a=1&b=1&s=612x612&w=0&k=20&c=us0spDxa4ZJ5e68-3NrD6JdvCYMaMQXLpLVhSVsZCKU="
+                            alt="Spicy Chicken Burger">
+                        <div class="food-info">
+                            <h4>Spicy Chicken Burger</h4>
+                            <p>Chicken patty with extra spices</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹230</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pizzas -->
+            <div id="pizzas" class="menu-section">
+                <h2>🍕 Pizzas</h2>
+                <div class="food-grid">
+                    <!-- Margherita Pizza -->
+                    <div class="food-card" data-name="Margherita Pizza" data-veg="true" data-price="350"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://media.istockphoto.com/id/1414575281/photo/a-delicious-and-tasty-italian-pizza-margherita-with-tomatoes-and-buffalo-mozzarella.webp?a=1&b=1&s=612x612&w=0&k=20&c=qO_TA5oZTY4d1e14l6noMYmAB26sSoE8L0m_VYl2bcU="
+                            alt="Margherita Pizza">
+                        <div class="food-info">
+                            <h4>Margherita Pizza</h4>
+                            <p>Classic cheese and tomato delight</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹350</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pepperoni Pizza -->
+                    <div class="food-card" data-name="Pepperoni Pizza" data-veg="false" data-price="400"
+                        data-bestseller="false" data-new="true" data-offer="false">
+                        <img src="https://img.freepik.com/premium-photo/pepperoni-pizza-wood-tray_1170794-469020.jpg"
+                            alt="Pepperoni Pizza">
+                        <div class="food-info">
+                            <h4>Pepperoni Pizza</h4>
+                            <p>Loaded with pepperoni slices and cheese</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹400</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Veggie Pizza -->
+                    <div class="food-card" data-name="Veggie Pizza" data-veg="true" data-price="380"
+                        data-bestseller="true" data-new="false" data-offer="false">
+                        <img src="https://images.unsplash.com/photo-1617470702449-45326b820990?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHZlZ2dpZSUyMHBpenphfGVufDB8fDB8fHww"
+                            alt="Veggie Pizza">
+                        <div class="food-info">
+                            <h4>Veggie Pizza</h4>
+                            <p>Fresh vegetables on a cheesy base</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹380</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- BBQ Chicken Pizza -->
+                    <div class="food-card" data-name="BBQ Chicken Pizza" data-veg="false" data-price="420">
+                        <img src="https://eadn-wc01-4177395.nxedge.io/wp-content/uploads/2020/02/1520217JSO0132.jpg"
+                            alt="BBQ Chicken Pizza">
+                        <div class="food-info">
+                            <h4>BBQ Chicken Pizza</h4>
+                            <p>Grilled chicken with BBQ sauce</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹420</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cheese Burst Pizza -->
+                    <div class="food-card" data-name="Cheese Burst Pizza" data-veg="true" data-price="450">
+                        <img src="https://media.istockphoto.com/id/1439782668/photo/a-homemade-cheese-pizza-sits-atop-a-decorative-cutting-board.webp?a=1&b=1&s=612x612&w=0&k=20&c=-lbAdG3mmGoHqYE8ii-a1Y4VdCa_hGb8wakZmiUvOJo="
+                            alt="Cheese Burst Pizza">
+                        <div class="food-info">
+                            <h4>Cheese Burst Pizza</h4>
+                            <p>Extra cheesy and delicious</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹450</div>
+                            <div class="rating">⭐ 4.8</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wraps & Rolls -->
+            <div id="wraps" class="menu-section">
+                <h2>🌯 Wraps & Rolls</h2>
+                <div class="food-grid">
+                    <!-- Chicken Wrap -->
+                    <div class="food-card" data-name="Chicken Wrap" data-veg="false" data-price="250"
+                        data-bestseller="true" data-new="false" data-offer="false">
+                        <img src="https://images.unsplash.com/photo-1666819615040-eff5e52c778a?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2hpY2tlbiUyMHdyYXB8ZW58MHx8MHx8fDA%3D"
+                            alt="Chicken Wrap">
+                        <div class="food-info">
+                            <h4>Chicken Wrap</h4>
+                            <p>Grilled chicken with fresh veggies</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹250</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Paneer Wrap -->
+                    <div class="food-card" data-name="Paneer Wrap" data-veg="true" data-price="220"
+                        data-bestseller="false" data-new="true" data-offer="true">
+                        <img src="https://foodcoordinates.com/wp-content/uploads/2018/09/paneer_tikka_wraps-1.jpg"
+                            alt="Paneer Wrap">
+                        <div class="food-info">
+                            <h4>Paneer Wrap</h4>
+                            <p>Spiced paneer with fresh vegetables</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹220</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Veg Roll -->
+                    <div class="food-card" data-name="Veg Roll" data-veg="true" data-price="180">
+                        <img src="https://thumbs.dreamstime.com/b/indian-veg-spring-roll-wraps-red-green-peppers-white-rice-shredded-carrots-four-tortilla-wraps-arranged-square-indian-veg-340146690.jpg"
+                            alt="Veg Roll">
+                        <div class="food-info">
+                            <h4>Veg Roll</h4>
+                            <p>Grilled vegetables with spicy sauces</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹180</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Spicy Chicken Roll -->
+                    <div class="food-card" data-name="Spicy Chicken Roll" data-veg="false" data-price="230">
+                        <img src="https://img.freepik.com/premium-photo/spicy-chicken-roll_895561-11045.jpg?w=2000"
+                            alt="Spicy Chicken Roll">
+                        <div class="food-info">
+                            <h4>Spicy Chicken Roll</h4>
+                            <p>Chicken with hot spices in wrap</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹230</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Falafel Wrap -->
+                    <div class="food-card" data-name="Falafel Wrap" data-veg="true" data-price="210">
+                        <img src="https://images.unsplash.com/photo-1667608929017-e5aa9f642be8?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZhbGFmZWwlMjB3cmFwfGVufDB8fDB8fHww"
+                            alt="Falafel Wrap">
+                        <div class="food-info">
+                            <h4>Falafel Wrap</h4>
+                            <p>Crispy falafel with hummus and salad</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹210</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Shawarma -->
+                    <div class="food-card" data-name="Shawarma" data-veg="false" data-price="200"
+                        data-bestseller="true">
+                        <img src="https://www.licious.in/blog/wp-content/uploads/2020/12/Chicken-Shawarma.jpg"
+                            alt="Shawarma">
+                        <div class="food-info">
+                            <h4>Shawarma</h4>
+                            <p>Loaded chicken shawarma wrap</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹200</div>
+                            <div class="rating">⭐ 4.8</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sides -->
+            <div id="sides" class="menu-section">
+                <h2>🍟 Sides</h2>
+                <div class="food-grid">
+                    <!-- French Fries -->
+                    <div class="food-card" data-name="French Fries" data-veg="true" data-price="100"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://media.istockphoto.com/photos/appetizing-french-fries-in-a-bowl-picture-id966934632?b=1&k=20&m=966934632&s=170667a&w=0&h=7zJeIigX9iEiK_cFC5scOWCNzehRfbQZGS54KBpTlqY="
+                            alt="French Fries">
+                        <div class="food-info">
+                            <h4>French Fries</h4>
+                            <p>Crispy golden fries with ketchup</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹100</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Onion Rings -->
+                    <div class="food-card" data-name="Onion Rings" data-veg="true" data-price="120"
+                        data-bestseller="false" data-new="true" data-offer="false">
+                        <img src="https://media.istockphoto.com/id/533423341/photo/crispy-onion-rings-close-up.jpg?b=1&s=170667a&w=0&k=20&c=m90NmU8mcs3hFOq-1AWN1rhuLdT65MFg80E1_KJWWm8="
+                            alt="Onion Rings">
+                        <div class="food-info">
+                            <h4>Onion Rings</h4>
+                            <p>Crispy fried onion rings</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹120</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cheese Balls -->
+                    <div class="food-card" data-name="Cheese Balls" data-veg="true" data-price="150">
+                        <img src="https://vitanify.com/wp-content/uploads/2024/12/Crispy-Cheese-Balls.jpg"
+                            alt="Cheese Balls">
+                        <div class="food-info">
+                            <h4>Cheese Balls</h4>
+                            <p>Deep-fried cheesy bites</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹150</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Garlic Bread -->
+                    <div class="food-card" data-name="Garlic Bread" data-veg="true" data-price="130">
+                        <img src="https://media.istockphoto.com/id/1441714834/photo/fresh-garlic-bread-with-cheese-and-spices-on-the-wooden-table.webp?a=1&b=1&s=612x612&w=0&k=20&c=AfL2o9isGA68tHCU-U1TijJVo4TtPsWK-wkAMDvucoI="
+                            alt="Garlic Bread">
+                        <div class="food-info">
+                            <h4>Garlic Bread</h4>
+                            <p>Buttery garlic bread sticks</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹130</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Potato Wedges -->
+                    <div class="food-card" data-name="Potato Wedges" data-veg="true" data-price="140">
+                        <img src="https://media.istockphoto.com/photos/roasted-potatoes-baked-potato-wedges-in-frying-pan-on-dark-background-picture-id1427917942?b=1&k=20&m=1427917942&s=170667a&w=0&h=z1yZMR4JSlcYveIKOW1eNWWLUnqfD78wB0ySVG2UDmw="
+                            alt="Potato Wedges">
+                        <div class="food-info">
+                            <h4>Potato Wedges</h4>
+                            <p>Seasoned potato wedges with dip</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹140</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Chicken Nuggets -->
+                    <div class="food-card" data-name="Chicken Nuggets" data-veg="false" data-price="180"
+                        data-bestseller="true">
+                        <img src="https://media.istockphoto.com/id/1365453158/photo/plate-homemade-chicken-nuggets-and-sauces.jpg?s=612x612&w=0&k=20&c=kKaPGFGdoA-NUFh-rsG7kRBw34LAlQS7FNDU2irPf6s="
+                            alt="Chicken Nuggets">
+                        <div class="food-info">
+                            <h4>Chicken Nuggets</h4>
+                            <p>Crispy fried chicken bites</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹180</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Beverages -->
+            <div id="beverages" class="menu-section">
+                <h2>🥤 Beverages</h2>
+                <div class="food-grid">
+                    <!-- Coca Cola -->
+                    <div class="food-card" data-name="Coca Cola" data-veg="true" data-price="50" data-bestseller="true"
+                        data-new="false" data-offer="false">
+                        <img src="https://tse2.mm.bing.net/th/id/OIP.Q1W9qE5SeGd5yCIaRTGobwHaFr?pid=ImgDet&w=474&h=363&rs=1&o=7&rm=3"
+                            alt="Coca Cola">
+                        <div class="food-info">
+                            <h4>Coca Cola</h4>
+                            <p>Refreshing soft drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹50</div>
+                            <div class="rating">⭐ 4.2</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Orange Juice -->
+                    <div class="food-card" data-name="Orange Juice" data-veg="true" data-price="80"
+                        data-bestseller="false" data-new="true" data-offer="true">
+                        <img src="https://img.freepik.com/premium-photo/photograph-juice_931878-197422.jpg"
+                            alt="Orange Juice">
+                        <div class="food-info">
+                            <h4>Orange Juice</h4>
+                            <p>Freshly squeezed oranges</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹80</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Lemonade -->
+                    <div class="food-card" data-name="Lemonade" data-veg="true" data-price="60">
+                        <img src="https://www.iff.com/wp-content/uploads/2024/12/14-section5-IFF-NEO%E2%84%A2-min-768x703.jpg"
+                            alt="Lemonade">
+                        <div class="food-info">
+                            <h4>Lemonade</h4>
+                            <p>Refreshing lemon drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹60</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Iced Tea -->
+                    <div class="food-card" data-name="Iced Tea" data-veg="true" data-price="70">
+                        <img src="https://media.istockphoto.com/id/473340780/photo/homemade-iced-tea-and-lemonade.webp?a=1&b=1&s=612x612&w=0&k=20&c=0RbNGHvZYStC-Reexq4CkWTEjkRLly9z-E0I9eDCHWA="
+                            alt="Iced Tea">
+                        <div class="food-info">
+                            <h4>Iced Tea</h4>
+                            <p>Chilled and refreshing tea</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹70</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Milkshake -->
+                    <div class="food-card" data-name="Milkshake" data-veg="true" data-price="100">
+                        <img src="https://img.freepik.com/premium-photo/3-milkshake-different-variant_1153568-163.jpg"
+                            alt="Milkshake">
+                        <div class="food-info">
+                            <h4>Milkshake</h4>
+                            <p>Chocolate / Strawberry / Vanilla</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹100</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mojito -->
+                    <div class="food-card" data-name="Mojito" data-veg="true" data-price="120" data-bestseller="true">
+                        <img src="https://cdn.loveandlemons.com/wp-content/uploads/2020/07/mojito.jpg" alt="Mojito">
+                        <div class="food-info">
+                            <h4>Mojito</h4>
+                            <p>Refreshing mint lime drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹120</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Blue Lagoon -->
+                    <div class="food-card" data-name="Blue Lagoon" data-veg="true" data-price="140">
+                        <img src="https://insanelygoodrecipes.com/wp-content/uploads/2023/10/Three-Glasses-of-Blue-Lagoon-Cocktails.jpg"
+                            alt="Blue Lagoon">
+                        <div class="food-info">
+                            <h4>Blue Lagoon</h4>
+                            <p>Cool citrus blue drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹140</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cold Coffee -->
+                    <div class="food-card" data-name="Cold Coffee" data-veg="true" data-price="130"
+                        data-bestseller="true">
+                        <img src="https://cdn.pixabay.com/photo/2021/01/06/10/11/coffee-5893926_1280.jpg"
+                            alt="Cold Coffee">
+                        <div class="food-info">
+                            <h4>Cold Coffee</h4>
+                            <p>Chilled creamy coffee</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹130</div>
+                            <div class="rating">⭐ 4.8</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Oreo Shake -->
+                    <div class="food-card" data-name="Oreo Shake" data-veg="true" data-price="150">
+                        <img src="https://www.thespruceeats.com/thmb/5P2of6ouNL_lqGOXLD9LcvTYA3w=/5472x3648/filters:fill(auto,1)/easy-oreo-milkshake-recipe-4038636-hero-01-5c1d540346e0fb000109272e.jpg"
+                            alt="Oreo Shake">
+                        <div class="food-info">
+                            <h4>Oreo Shake</h4>
+                            <p>Oreo blended milkshake</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹150</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mango Shake -->
+                    <div class="food-card" data-name="Mango Shake" data-veg="true" data-price="140">
+                        <img src="https://i.pinimg.com/736x/8a/c8/93/8ac893ae426241f75962933ff4747e65.jpg"
+                            alt="Mango Shake">
+                        <div class="food-info">
+                            <h4>Mango Shake</h4>
+                            <p>Fresh mango milkshake</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹140</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desserts -->
+            <div id="desserts" class="menu-section">
+                <h2>🍰 Desserts</h2>
+                <div class="food-grid">
+                    <!-- Chocolate Muffin -->
+                    <div class="food-card" data-name="Chocolate Muffin" data-veg="true" data-price="120"
+                        data-bestseller="true" data-new="false" data-offer="false">
+                        <img src="https://images.unsplash.com/photo-1605615471737-4b2b4ba1d432?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2hvY29sYXRlJTIwbXVmZmlufGVufDB8fDB8fHww"
+                            alt="Chocolate Muffin">
+                        <div class="food-info">
+                            <h4>Chocolate Muffin</h4>
+                            <p>Rich chocolate muffin with cream</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹120</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Brownie -->
+                    <div class="food-card" data-name="Brownie" data-veg="true" data-price="130" data-bestseller="false"
+                        data-new="true" data-offer="true">
+                        <img src="https://media.istockphoto.com/id/1255426185/photo/delicious-chocolate-zucchini-brownies.webp?b=1&s=612x612&w=0&k=20&c=h89bYq9xS7-Szp2IoOqYn1kgDo8_SdocNWJZjZbGiWg="
+                            alt="Brownie">
+                        <div class="food-info">
+                            <h4>Brownie</h4>
+                            <p>Chocolate fudge brownie</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹130</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ice Cream Sundae -->
+                    <div class="food-card" data-name="Ice Cream Sundae" data-veg="true" data-price="150">
+                        <img src="https://images.unsplash.com/photo-1747292718367-099a45c56eac?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Ice Cream Sundae">
+                        <div class="food-info">
+                            <h4>Ice Cream Sundae</h4>
+                            <p>Vanilla ice cream with chocolate syrup</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹150</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fruit Salad -->
+                    <div class="food-card" data-name="Fruit Salad" data-veg="true" data-price="100">
+                        <img src="https://img.freepik.com/premium-photo/fruit-salad-freshness_729149-4327.jpg"
+                            alt="Fruit Salad">
+                        <div class="food-info">
+                            <h4>Fruit Salad</h4>
+                            <p>Fresh seasonal fruits</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹100</div>
+                            <div class="rating">⭐ 4.3</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cupcake -->
+                    <div class="food-card" data-name="Cupcake" data-veg="true" data-price="120">
+                        <img src="https://plus.unsplash.com/premium_photo-1663840297086-dbd47bccef74?fm=jpg&w=3000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Cupcake">
+                        <div class="food-info">
+                            <h4>Cupcake</h4>
+                            <p>Vanilla / Chocolate cupcakes</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹120</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Healthy Options -->
+            <div id="healthy" class="menu-section">
+                <h2>🥗 Healthy Options</h2>
+                <div class="food-grid">
+                    <!-- Grilled Veg Salad -->
+                    <div class="food-card" data-name="Grilled Veg Salad" data-veg="true" data-price="200"
+                        data-bestseller="true" data-new="false" data-offer="false">
+                        <img src="https://cleanfoodcrush.com/wp-content/uploads/2024/07/Summertime-Grilled-Fresh-Vegetable-Salad-step-5-800x988.jpg"
+                            alt="Grilled Veg Salad">
+                        <div class="food-info">
+                            <h4>Grilled Veg Salad</h4>
+                            <p>Fresh veggies with light dressing</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹200</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Quinoa Bowl -->
+                    <div class="food-card" data-name="Quinoa Bowl" data-veg="true" data-price="250"
+                        data-bestseller="false" data-new="true" data-offer="true">
+                        <img src="https://plus.unsplash.com/premium_photo-1705207702013-368450377046?blend=000000&blend-alpha=10&blend-mode=normal&blend-w=1&crop=faces%2Cedges&h=630&mark=https:%2F%2Fimages.unsplash.com%2Fopengraph%2Flogo.png&mark-align=top%2Cleft&mark-pad=50&mark-w=64&w=1200&auto=format&fit=crop&q=60&ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzA2MjQ1ODk4fA&ixlib=rb-4.0.3"
+                            alt="Quinoa Bowl">
+                        <div class="food-info">
+                            <h4>Quinoa Bowl</h4>
+                            <p>Protein-rich quinoa with veggies</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹250</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Grilled Chicken Salad -->
+                    <div class="food-card" data-name="Grilled Chicken Salad" data-veg="false" data-price="280">
+                        <img src="https://media.istockphoto.com/id/506583996/photo/grilled-chicken-with-quinoa-and-brown-rice-salad.webp?a=1&b=1&s=612x612&w=0&k=20&c=7NsORsVjR3d9h33LcE2DkfnxKtJlu-Xj77BeWp73LoY="
+                            alt="Grilled Chicken Salad">
+                        <div class="food-info">
+                            <h4>Grilled Chicken Salad</h4>
+                            <p>Healthy grilled chicken with greens</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹280</div>
+                            <div class="rating">⭐ 4.7</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fruit Yogurt Bowl -->
+                    <div class="food-card" data-name="Fruit Yogurt Bowl" data-veg="true" data-price="180">
+                        <img src="https://plus.unsplash.com/premium_photo-1663840135821-04f6598687b1?blend=000000&blend-alpha=10&blend-mode=normal&blend-w=1&crop=faces%2Cedges&h=630&mark=https:%2F%2Fimages.unsplash.com%2Fopengraph%2Flogo.png&mark-align=top%2Cleft&mark-pad=50&mark-w=64&w=1200&auto=format&fit=crop&q=60&ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzA5MjgwNjU3fA&ixlib=rb-4.0.3"
+                            alt="Fruit Yogurt Bowl">
+                        <div class="food-info">
+                            <h4>Fruit Yogurt Bowl</h4>
+                            <p>Yogurt with fresh fruits</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹180</div>
+                            <div class="rating">⭐ 4.4</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Avocado Toast -->
+                    <div class="food-card" data-name="Avocado Toast" data-veg="true" data-price="220">
+                        <img src="https://images.unsplash.com/photo-1633204339691-9d3645430e14?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGF2b2NhZG8lMjB0b2FzdHxlbnwwfHwwfHx8MA%3D%3D"
+                            alt="Avocado Toast">
+                        <div class="food-info">
+                            <h4>Avocado Toast</h4>
+                            <p>Whole grain toast with avocado</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹220</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Combos / Meal Deals -->
+            <div id="combos" class="menu-section">
+                <h2>🥣 Combos / Meal Deals</h2>
+                <div class="food-grid">
+                    <!-- Burger + Fries + Drink Combo-->
+                    <div class="food-card" data-name="Burger + Fries + Drink" data-veg="false" data-price="400"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://images.unsplash.com/photo-1581822609518-aa7665479ee3?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJ1cmdlciUyMGZyaWVzfGVufDB8fDB8fHww"
+                            alt="Burger Combo">
+                        <div class="food-info">
+                            <h4>Burger + Fries + Drink</h4>
+                            <p>Chicken burger combo with fries & drink</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹400</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Veg Burger Combo -->
+                    <div class="food-card" data-name="Veg Burger Combo" data-veg="true" data-price="350"
+                        data-bestseller="false" data-new="true" data-offer="false">
+                        <img src="https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="Veg Burger Combo">
+                        <div class="food-info">
+                            <h4>Veg Burger Combo</h4>
+                            <p>Veg burger with fries & soft drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹350</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Pizza + Drink Combo -->
+                    <div class="food-card" data-name="Pizza + Drink Combo" data-veg="true" data-price="500">
+                        <img src="https://media.istockphoto.com/photos/italian-food-classic-thin-pizza-with-large-sides-prosciutto-cherry-picture-id1202356083?b=1&k=20&m=1202356083&s=170667a&w=0&h=3k7krx0kGJYhjWh-XdHXHWNeJu6oSicbMRi5nkQx6FQ="
+                            alt="Pizza Combo">
+                        <div class="food-info">
+                            <h4>Pizza + Drink Combo</h4>
+                            <p>Medium pizza with soft drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹500</div>
+                            <div class="rating">⭐ 4.6</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Wrap + Fries + Drink Combo -->
+                    <div class="food-card" data-name="Wrap + Fries + Drink" data-veg="true" data-price="380">
+                        <img src="https://static.vecteezy.com/system/resources/previews/063/128/607/large_2x/shawarma-wrap-fries-and-soda-can-served-as-a-fast-food-combo-on-black-reflective-background-photo.jpg"
+                            alt="Wrap Combo">
+                        <div class="food-info">
+                            <h4>Wrap + Fries + Drink</h4>
+                            <p>Veg wrap with fries and soft drink</p>
+                            <div><span class="veg"></span> Veg</div>
+                            <div class="price">₹380</div>
+                            <div class="rating">⭐ 4.5</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- family Meal Deal Combo -->
+                    <div class="food-card" data-name="Family Meal Deal" data-veg="false" data-price="1200"
+                        data-bestseller="true" data-new="false" data-offer="true">
+                        <img src="https://storage.googleapis.com/phx2-uat-wordpress-uploads/1/2022/08/PP_SS_HP_640x390_EN.jpg?cache_key=26"
+                            alt="Family Meal Deal">
+                        <div class="food-info">
+                            <h4>Family Meal Deal</h4>
+                            <p>2 pizzas, 4 drinks, 2 sides for family</p>
+                            <div><span class="non-veg"></span> Non-Veg</div>
+                            <div class="price">₹1200</div>
+                            <div class="rating">⭐ 4.8</div>
+                        </div>
+                        <div class="food-actions">
+                            <input type="number" min="1" value="1">
+                            <button onclick="addToCart(this)">Add to Cart</button>
+                            <div class="customize-panel">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Smooth Scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Live Search & Filters
+        function filterFood() {
+            let search = document.getElementById('search').value.toLowerCase();
+            let vegOnly = document.getElementById('vegOnly').checked;
+            let priceSort = document.getElementById('priceFilter').value;
+            let sortFilter = document.getElementById('sortFilter').value; // best seller, new, offer
+
+            let foods = document.querySelectorAll('.food-card');
+            let foodArr = Array.from(foods);
+
+            // Show / hide based on search and veg
+            foodArr.forEach(card => {
+                let name = card.dataset.name.toLowerCase();
+                let isVeg = card.dataset.veg === "true";
+                let show = name.includes(search) && (!vegOnly || isVeg);
+
+                // Additional sorting filters
+                if (sortFilter === "bestseller" && card.dataset.bestseller !== "true") show = false;
+                if (sortFilter === "new" && card.dataset.new !== "true") show = false;
+                if (sortFilter === "offer" && card.dataset.offer !== "true") show = false;
+
+                card.style.display = show ? 'flex' : 'none';
+            });
+
+            // Price sorting
+            if (priceSort) {
+                let visibleCards = foodArr.filter(c => c.style.display !== 'none');
+                visibleCards.sort((a, b) => {
+                    let priceA = parseInt(a.dataset.price);
+                    let priceB = parseInt(b.dataset.price);
+                    return priceSort === 'low' ? priceA - priceB : priceB - priceA;
+                });
+                visibleCards.forEach(card => card.parentElement.appendChild(card));
+            }
+        }
+
+        localStorage.setItem("menu", JSON.stringify(FALLBACK_MENU));
+
+        function checkLogin() {
+            let user = localStorage.getItem("user");
+
+            if (user) {
+                alert("Welcome back!");
+                window.location.href = "profile.html";
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+
+    </script>
+
+    <script src="cart.js"></script>
+
+</body>
+
+</html>
