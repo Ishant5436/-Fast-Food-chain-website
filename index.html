@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>QuickBite | Fresh Fast Food</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">QuickBite</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-icons">
+            <div class="cart-icon" onclick="window.location.href='cart.html'">🛒
+                <span id="cart-count">0</span>
+            </div>
+            <div class="profile-icon" onclick="checkLogin()">👤</div>
+        </div>
+    </header>
+
+    <!-- Slider -->
+    <section class="hero-wrapper">
+        <div class="hero-slider" id="hero-slider">
+
+            <div class="slide active"
+                style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80');">
+                <div class="overlay"></div>
+                <div class="slide-content">
+                    <span class="tag">Limited Time</span>
+                    <h1>🔥 Chef’s Daily Special</h1>
+                    <p>Experience the ultimate fusion of spices and flavor.</p>
+                </div>
+            </div>
+
+            <div class="slide breakfast"
+                style="background-image: url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YnJlYWtmYXN0fGVufDB8fDB8fHww');">
+                <div class="overlay"></div>
+                <div class="slide-content">
+                    <h1>🥞 Breakfast Bonanza</h1>
+                    <p>Morning combos starting at ₹99</p>
+                </div>
+            </div>
+
+            <div class="slide lunch"
+                style="background-image: url('https://plus.unsplash.com/premium_photo-1673108852141-e8c3c22a4a22?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bHVuY2h8ZW58MHx8MHx8fDA%3D');">
+                <div class="overlay"></div>
+                <div class="slide-content">
+                    <h1>🍛 Lunch Deals</h1>
+                    <p>Unlimited Meal Combos at ₹199</p>
+                </div>
+            </div>
+
+            <div class="slide dinner"
+                style="background-image: url('https://media.istockphoto.com/id/1316145932/photo/table-top-view-of-spicy-food.webp?a=1&b=1&s=612x612&w=0&k=20&c=scseGeDCjSghwD2RELSaaT2Pn2NQz0gflEQ4BuiTSjs=');">
+                <div class="overlay"></div>
+                <div class="slide-content">
+                    <h1>🌙 Dinner Specials</h1>
+                    <p>Family Feast Offers Available</p>
+                </div>
+            </div>
+
+            <div class="slide dessert"
+                style="background-image: url('https://media.istockphoto.com/id/1255426185/photo/delicious-chocolate-zucchini-brownies.webp?b=1&s=612x612&w=0&k=20&c=h89bYq9xS7-Szp2IoOqYn1kgDo8_SdocNWJZjZbGiWg=');">
+                <div class="overlay"></div>
+                <div class="slide-content">
+                    <h1>🍨 Late Night Desserts</h1>
+                    <p>Open 24x7 for your cravings!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Filter -->
+    <section class="filter-section">
+        <h3>What's your mood?</h3>
+        <div class="filter-container">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="spicy">🌶️ Spicy</button>
+            <button class="filter-chip" data-filter="quick">⚡ Quick Bite</button>
+            <button class="filter-chip" data-filter="sweet">🍩 Sweet Tooth</button>
+            <button class="filter-chip" data-filter="sharing">🤝 Sharing</button>
+        </div>
+    </section>
+
+    <!-- Daily Specials -->
+    <section class="recommended-section">
+        <h2>🔥 Daily Specials</h2>
+
+        <div class="festival-grid">
+            <div class="food-card" data-name="Chef’s Special Meal" data-price="249" data-category="all">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80">
+
+                <div class="card-content">
+                    <h4>Chef’s Special Meal</h4>
+                    <p>Exclusive combo curated by our chef.</p>
+                    <span>₹249</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="food-card" data-name="Spicy Chicken Burger" data-price="179" data-category="spicy">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80">
+
+                <div class="card-content">
+                    <h4>Spicy Chicken Burger</h4>
+                    <p>Loaded with spicy sauce & crispy patty.</p>
+                    <span>₹179</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="food-card" data-name="Loaded Cheese Fries" data-price="129" data-category="quickbite">
+                <img src="https://tse2.mm.bing.net/th/id/OIP.fNJ48h0ksZtXfhPH3vJKhgHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3">
+
+                <div class="card-content">
+                    <h4>Loaded Cheese Fries</h4>
+                    <p>Crispy fries topped with melted cheese.</p>
+                    <span>₹129</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="food-card" data-name="Special Dessert Cup" data-price="149" data-category="Sweet Tooth">
+                <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=800&q=80">
+
+                <div class="card-content">
+                    <h4>Special Dessert Cup</h4>
+                    <p>Sweet treat to complete your meal.</p>
+                    <span>₹149</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Most Ordered -->
+    <section class="recommended-section">
+        <h2>🔥 Most Ordered Near You</h2>
+
+        <div class="festival-grid">
+
+            <div class="food-card" data-name="Farmhouse Pizza" data-price="299" data-category="sharing">
+                <img
+                    src="https://th.bing.com/th/id/OIP.G0YKaFRUwUkLeKI0gp-qnwHaE8?w=258&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3">
+
+                <div class="card-content">
+                    <h4>Farmhouse Pizza</h4>
+                    <p>Fresh veggies with mozzarella & herbs.</p>
+                    <span>₹299</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="food-card" data-name="Peri Peri Fries" data-price="99" data-category="spicy">
+                <img src="https://tse4.mm.bing.net/th/id/OIP.lf6chq1RDevswl43k6umywHaFj?rs=1&pid=ImgDetMain&o=7&rm=3">
+
+                <div class="card-content">
+                    <h4>Peri Peri Fries</h4>
+                    <p>Spicy & crispy fries for your cravings.</p>
+                    <span>₹99</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="food-card" data-name="Chocolate Brownie" data-price="129" data-category="Sweet Tooth">
+                <img
+                    src="https://media.istockphoto.com/id/1255426185/photo/delicious-chocolate-zucchini-brownies.webp?b=1&s=612x612&w=0&k=20&c=h89bYq9xS7-Szp2IoOqYn1kgDo8_SdocNWJZjZbGiWg=">
+
+                <div class="card-content">
+                    <h4>Chocolate Brownie</h4>
+                    <p>Rich chocolate dessert served warm.</p>
+                    <span>₹129</span>
+                    <button class="cart-btn" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Details -->
+    <section class="contact-section">
+        <h2>Contact Us</h2>
+
+        <div class="contact-container">
+            <div class="contact-box">
+                <h3>📍 Address</h3>
+                <p>Mumbai, Maharashtra, India</p>
+            </div>
+
+            <div class="contact-box">
+                <h3>📞 Phone</h3>
+                <p>+91 98765 43210</p>
+            </div>
+
+            <div class="contact-box">
+                <h3>📧 Email</h3>
+                <p>support@quickbite.com</p>
+            </div>
+
+            <div class="contact-box">
+                <h3>⏰ Hours</h3>
+                <p>Open 24 x 7</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <h3>QuickBite</h3>
+        <p>Freshness delivered in a flash.</p>
+        <p>© 2026 QuickBite Management System</p>
+    </footer>
+
+    <!-- <canvas id="confetti-canvas"></canvas> -->
+
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout | QuickBite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .container {
+            padding: 40px 8%;
+        }
+
+        /* BOX */
+        .box {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+        }
+
+        /* INPUTS */
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        /* BUTTON */
+        button {
+            padding: 12px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        /* BILL */
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+
+        .bill-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* DONATION CARD */
+        .donation-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff5f0;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .donation-text p {
+            font-size: 12px;
+            color: #777;
+            margin: 3px 0 0;
+        }
+
+        /* PERFECT TOGGLE */
+        .donation-toggle {
+            position: relative;
+            width: 45px;
+            height: 24px;
+        }
+
+        .donation-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .donation-toggle label {
+            position: absolute;
+            cursor: pointer;
+            background: #ccc;
+            border-radius: 34px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            transition: 0.3s;
+        }
+
+        .donation-toggle label::before {
+            content: "";
+            position: absolute;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            top: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .donation-toggle input:checked+label {
+            background: #ff4d4d;
+        }
+
+        .donation-toggle input:checked+label::before {
+            transform: translateX(21px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Checkout 🧾</h2>
+
+        <!-- USER DETAILS -->
+        <div class="box">
+            <h3>Delivery Details</h3>
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="text" id="address" placeholder="Address">
+            <input type="text" id="phone" placeholder="Phone Number">
+
+            <select id="payment">
+                <option>Cash on Delivery</option>
+                <option>UPI</option>
+                <option>Card</option>
+            </select>
+        </div>
+
+        <!-- DONATION -->
+        <div class="box">
+            <div class="donation-card">
+                <div class="donation-text">
+                    <strong>Zero Hunger 🍽️</strong>
+                    <p>Donate 2% to help feed someone</p>
+                </div>
+
+                <div class="donation-toggle">
+                    <input type="checkbox" id="donationCheck" checked>
+                    <label for="donationCheck"></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- BILL -->
+        <div class="box">
+            <h3>Bill Summary</h3>
+
+            <div class="bill-row">
+                <span>Subtotal</span>
+                <span>₹<span id="subtotal"></span></span>
+            </div>
+
+            <div class="bill-row">
+                <span>Packaging</span>
+                <span>₹20</span>
+            </div>
+
+            <div class="bill-row">
+                <span>Delivery</span>
+                <span>₹<span id="delivery"></span></span>
+            </div>
+
+            <div class="bill-row">
+                <span>Tax</span>
+                <span>₹<span id="tax"></span></span>
+            </div>
+
+            <div class="bill-row">
+                <span>Donation</span>
+                <span>₹<span id="donation"></span></span>
+            </div>
+
+            <hr>
+
+            <div class="bill-total">
+                <span>Total</span>
+                <span>₹<span id="total"></span></span>
+            </div>
+        </div>
+
+        <button onclick="placeOrder()">Place Order</button>
+    </div>
+
+    <script src="checkout.js?v=20260327-3"></script>
+
+</body>
+
+</html>
