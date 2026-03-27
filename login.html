@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login | QuickBite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 8%;
+            background: #ff4d4d;
+            color: white;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 15px;
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: black;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* ===== LOGIN BOX ===== */
+        .container {
+            height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: white;
+            padding: 35px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #ff4d4d;
+            color: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .login-box button:hover {
+            background: #e63c3c;
+        }
+
+        .error {
+            color: red;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== NAVBAR ===== -->
+    <header class="navbar">
+        <div class="logo">QuickBite</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-icons">
+            <div class="cart-icon" onclick="window.location.href='cart.html'">🛒
+                <span id="cart-count">0</span>
+            </div>
+
+            <div class="profile-icon" onclick="checkLogin()">👤</div>
+        </div>
+    </header>
+
+    <!-- Login form -->
+    <div class="container">
+        <div class="login-box">
+            <h2>Login</h2>
+
+            <input type="email" id="email" placeholder="Enter Email">
+            <input type="password" id="password" placeholder="Enter Password">
+
+            <button onclick="loginUser()">Login</button>
+
+            <p style="margin-top:10px;">
+                Don't have an account?
+                <a href="#" onclick="showRegister()">Register</a>
+            </p>
+
+            <div id="registerBox" style="display:none; margin-top:15px;">
+                <input type="text" id="reg_name" placeholder="Enter Name">
+                <input type="email" id="reg_email" placeholder="Enter Email">
+                <input type="password" id="reg_password" placeholder="Enter Password">
+                <button onclick="registerUser()">Register</button>
+            </div>
+
+            <p class="error" id="errorMsg"></p>
+        </div>
+    </div>
+
+
+    <script>
+
+        // LOGIN FUNCTION 
+     function loginUser() {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const errorMsg = document.getElementById("errorMsg");
+
+            errorMsg.innerText = "";
+
+            if (!email || !password) {
+                errorMsg.innerText = "All fields are required.";
+                return;
+            }
+
+            fetch('http://localhost/food_project/api/auth/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ email, password })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("Login Response:", data);
+
+                    if (data.status === "success") {
+                        localStorage.setItem("user", JSON.stringify({ email }));
+
+                        window.location.href = "checkout.html";
+                    } else {
+                        errorMsg.innerText = "Invalid email or password";
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    errorMsg.innerText = "Server error";
+                });
+        }
+
+        function showRegister() {
+            document.getElementById("registerBox").style.display = "block";
+        }
+
+        function registerUser() {
+            const name = document.getElementById("reg_name").value.trim();
+            const email = document.getElementById("reg_email").value.trim();
+            const password = document.getElementById("reg_password").value.trim();
+
+            if (!name || !email || !password) {
+                alert("Fill all fields!");
+                return;
+            }
+
+            fetch('http://localhost/food_project/api/auth/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ name, email, password })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+
+                    if (data.success || data.status === "success") {
+                        alert("Registration successful! Now login.");
+                    } else {
+                        alert("User already exists or error");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Registration failed");
+                });
+        }
+
+        // ===== CHECK LOGIN (PROFILE ICON) =====
+        function checkLogin() {
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            if (user) {
+                alert("Logged in as: " + user.email);
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+
+
+        
+
+        // ===== CART COUNT (OPTIONAL) =====
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        document.getElementById("cart-count").innerText = cart.length;
+    </script>
+
+</body>
+
+</html>
